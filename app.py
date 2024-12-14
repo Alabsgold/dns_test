@@ -51,6 +51,11 @@ def add():
 def remove(domain_id):
     remove_blocked_domain(domain_id)
     return redirect("/")
+    
+# Example of reading environment variables
+DEBUG = os.environ.get("DEBUG", False)
+SECRET_KEY = os.environ.get("SECRET_KEY", "default-secret-key")
+DB_URL = os.environ.get("DB_URL")
 
 if __name__ == "__main__":
     app.run(debug=True)
