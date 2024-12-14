@@ -2,6 +2,22 @@ import socket
 import sqlite3
 from dnslib import DNSRecord, DNSHeader, RR, QTYPE, A
 import logging
+from datetime import datetime
+
+def is_blocked(domain):
+    # Define blocking hours
+    start_hour = 21  # 9 PM
+    end_hour = 6  # 6 AM
+    current_hour = datetime.now().hour
+
+    if start_hour <= current_hour or current_hour < end_hour:
+        conn = sqlite3.connect("blocklist.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1 FROM blocklist WHERE domain = ?", (domain,))
+        result = cursor.fetchone()
+        conn.close()
+        return result is not None
+    return False
 
 # Configure logging
 logging.basicConfig(
